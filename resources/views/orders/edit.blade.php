@@ -15,7 +15,7 @@
                     @method('PUT')
 
                     <div class="row mb-4">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="mesa" class="form-label">Mesa <span class="text-danger">*</span></label>
                             <select class="form-select @error('mesa') is-invalid @enderror" id="mesa" name="mesa" required>
                                 @for($m = 1; $m <= config('menu.mesas_count', 8); $m++)
@@ -24,7 +24,7 @@
                             </select>
                             @error('mesa')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="status" class="form-label">Status</label>
                             <select class="form-select" id="status" name="status">
                                 @foreach(\App\Models\Order::getStatuses() as $key => $label)
@@ -32,7 +32,16 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <label for="payment_method" class="form-label">Forma de pagamento <span class="text-danger">*</span></label>
+                            <select class="form-select @error('payment_method') is-invalid @enderror" id="payment_method" name="payment_method" required>
+                                @foreach(\App\Models\Order::getPaymentMethods() as $key => $label)
+                                    <option value="{{ $key }}" {{ old('payment_method', $order->payment_method ?? 'dinheiro') == $key ? 'selected' : '' }}>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            @error('payment_method')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-3">
                             <label for="notes" class="form-label">Observações</label>
                             <input type="text" class="form-control" id="notes" name="notes" value="{{ old('notes', $order->notes) }}">
                         </div>

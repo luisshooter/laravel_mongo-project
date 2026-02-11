@@ -26,6 +26,7 @@
                     </tbody>
                 </table>
                 <p class="text-end mb-0"><strong>Total: R$ {{ number_format($order->total_price, 2, ',', '.') }}</strong></p>
+                <p class="text-end mt-1 mb-0"><span class="text-muted">Forma de pagamento:</span> <strong>{{ $order->payment_label }}</strong></p>
 
                 @if($order->notes)
                     <div class="mt-3">

@@ -16,8 +16,25 @@ class Order extends Model
         'items',
         'total_price',
         'status',
+        'payment_method',
         'notes',
     ];
+
+    const PAYMENT_CASH = 'dinheiro';
+    const PAYMENT_CARD = 'cartao';
+
+    public static function getPaymentMethods(): array
+    {
+        return [
+            self::PAYMENT_CASH => 'Dinheiro',
+            self::PAYMENT_CARD => 'Cartão',
+        ];
+    }
+
+    public function getPaymentLabelAttribute(): string
+    {
+        return self::getPaymentMethods()[$this->payment_method] ?? '-';
+    }
 
     protected $casts = [
         'mesa' => 'integer',

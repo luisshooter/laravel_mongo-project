@@ -25,6 +25,7 @@
                             <th>Mesa</th>
                             <th>Itens (resumo)</th>
                             <th>Total</th>
+                            <th>Pagamento</th>
                             <th>Status</th>
                             @if(Auth::user()->permission_level >= 2)
                                 <th>Criado por</th>
@@ -51,6 +52,7 @@
                                     @endif
                                 </td>
                                 <td><strong>R$ {{ number_format($order->total_price, 2, ',', '.') }}</strong></td>
+                                <td><span class="badge bg-secondary">{{ $order->payment_label }}</span></td>
                                 <td>
                                     <span class="badge bg-{{ $order->status_badge }}">{{ $order->status_label }}</span>
                                 </td>

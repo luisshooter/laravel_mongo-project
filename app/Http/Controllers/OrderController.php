@@ -36,6 +36,7 @@ class OrderController extends Controller
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.unit_price' => 'required|numeric|min:0',
             'status' => 'required|in:pending,processing,completed,cancelled',
+            'payment_method' => 'required|in:dinheiro,cartao',
             'notes' => 'nullable|string|max:1000',
         ], [
             'mesa.required' => 'Selecione a mesa.',
@@ -43,6 +44,8 @@ class OrderController extends Controller
             'mesa.max' => 'O restaurante possui 8 mesas.',
             'items.required' => 'Adicione ao menos um item ao pedido.',
             'items.min' => 'Adicione ao menos um item ao pedido.',
+            'payment_method.required' => 'Selecione a forma de pagamento.',
+            'payment_method.in' => 'Forma de pagamento inválida.',
         ]);
 
         if ($validator->fails()) {
@@ -71,6 +74,7 @@ class OrderController extends Controller
             'mesa' => (int) $request->mesa,
             'items' => $items,
             'status' => $request->status,
+            'payment_method' => $request->payment_method,
             'notes' => $request->notes,
         ]);
 
@@ -116,10 +120,13 @@ class OrderController extends Controller
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.unit_price' => 'required|numeric|min:0',
             'status' => 'required|in:pending,processing,completed,cancelled',
+            'payment_method' => 'required|in:dinheiro,cartao',
             'notes' => 'nullable|string|max:1000',
         ], [
             'mesa.required' => 'Selecione a mesa.',
             'items.required' => 'Adicione ao menos um item ao pedido.',
+            'payment_method.required' => 'Selecione a forma de pagamento.',
+            'payment_method.in' => 'Forma de pagamento inválida.',
         ]);
 
         if ($validator->fails()) {
@@ -145,6 +152,7 @@ class OrderController extends Controller
             'mesa' => (int) $request->mesa,
             'items' => $items,
             'status' => $request->status,
+            'payment_method' => $request->payment_method,
             'notes' => $request->notes,
         ]);
 

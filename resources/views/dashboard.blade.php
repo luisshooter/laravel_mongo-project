@@ -156,7 +156,7 @@
                     @if($stats['recent_orders']->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-modern table-hover mb-0">
-                                <thead><tr><th>Mesa</th><th>Itens</th><th>Total</th><th>Status</th><th>Data</th></tr></thead>
+                                <thead><tr><th>Mesa</th><th>Itens</th><th>Total</th><th>Pagamento</th><th>Status</th><th>Data</th></tr></thead>
                                 <tbody>
                                     @foreach($stats['recent_orders'] as $order)
                                         <tr>
@@ -170,6 +170,7 @@
                                                 @else — @endif
                                             </td>
                                             <td>R$ {{ number_format($order->total_price, 2, ',', '.') }}</td>
+                                            <td><span class="badge bg-secondary">{{ $order->payment_label }}</span></td>
                                             <td><span class="badge bg-{{ $order->status_badge }}">{{ $order->status_label }}</span></td>
                                             <td>{{ $order->formatted_created_at }}</td>
                                         </tr>
