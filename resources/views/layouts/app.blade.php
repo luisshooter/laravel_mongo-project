@@ -14,7 +14,7 @@
     (function(){var t=document.documentElement.getAttribute('data-theme')||localStorage.getItem('restaurante-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
     </script>
 </head>
-<body class="app-body">
+<body class="app-body" id="appBody">
     @auth
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -47,6 +47,12 @@
             @endif
         </nav>
         <div class="sidebar-footer">
+            <div class="sidebar-collapse-row d-none d-lg-flex">
+                <span class="sidebar-label sidebar-collapse-label"><i class="bi bi-layout-sidebar-inset-reverse"></i> Recolher menu</span>
+                <button class="sidebar-collapse-btn" type="button" id="sidebarCollapse" aria-label="Recolher menu para ver só ícones">
+                    <i class="bi bi-chevron-double-left" id="sidebarCollapseIcon"></i>
+                </button>
+            </div>
             <div class="theme-toggle-wrapper">
                 <span class="sidebar-label"><i class="bi bi-brightness-high"></i> Modo claro</span>
                 <button type="button" class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
@@ -66,16 +72,14 @@
             <form action="{{ route('logout') }}" method="POST" class="w-100">
                 @csrf
                 <button type="submit" class="sidebar-btn-logout">
-                    <i class="bi bi-box-arrow-right"></i> Sair
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span class="sidebar-btn-logout-text">Sair</span>
                 </button>
             </form>
         </div>
     </aside>
     <button class="sidebar-overlay d-lg-none" id="sidebarOverlay" aria-hidden="true"></button>
     <header class="topbar d-lg-none">
-        <button class="btn btn-link text-dark theme-toggle-mobile me-2" id="themeToggleMobile" aria-label="Alternar tema">
-            <i class="bi bi-moon-stars" id="iconThemeMobile"></i>
-        </button>
         <button class="btn btn-link text-dark" type="button" id="sidebarOpen" aria-label="Abrir menu">
             <i class="bi bi-list fs-4"></i>
         </button>
@@ -85,15 +89,6 @@
     <main class="main-content @auth has-sidebar @endauth" id="mainContent">
         @auth
         <div class="main-content-inner">
-            <div class="d-none d-lg-flex align-items-center justify-content-end gap-2 mb-3">
-                <span class="text-muted small"><i class="bi bi-brightness-high me-1"></i> Claro</span>
-                <button type="button" class="theme-toggle theme-toggle-inline" id="themeToggleDesktop" aria-label="Alternar tema">
-                    <span class="theme-toggle-track">
-                        <span class="theme-toggle-thumb"></span>
-                    </span>
-                </button>
-                <span class="text-muted small"><i class="bi bi-moon-stars me-1"></i> Escuro</span>
-            </div>
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
                     <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
@@ -139,8 +134,6 @@
             if (!html) return;
             html.setAttribute('data-theme', theme);
             setStored(theme);
-            var iconMobile = document.getElementById('iconThemeMobile');
-            if (iconMobile) iconMobile.className = theme === DARK ? 'bi bi-sun' : 'bi bi-moon-stars';
         }
         function toggleTheme() {
             var current = document.getElementById('html-theme').getAttribute('data-theme') || getStored();
@@ -148,20 +141,31 @@
         }
         document.addEventListener('DOMContentLoaded', function() {
             applyTheme(getStored());
-            [ 'themeToggle', 'themeToggleDesktop', 'themeToggleMobile' ].forEach(function(id) {
-                var el = document.getElementById(id);
-                if (el) el.addEventListener('click', toggleTheme);
-            });
+            var themeEl = document.getElementById('themeToggle');
+            if (themeEl) themeEl.addEventListener('click', toggleTheme);
             var sidebar = document.getElementById('sidebar');
             var overlay = document.getElementById('sidebarOverlay');
             var openBtn = document.getElementById('sidebarOpen');
             var closeBtn = document.getElementById('sidebarClose');
+            var collapseBtn = document.getElementById('sidebarCollapse');
+            var collapseIcon = document.getElementById('sidebarCollapseIcon');
+            var body = document.getElementById('appBody');
+            var COLLAPSE_KEY = 'restaurante-sidebar-collapsed';
+            function isCollapsed() { return localStorage.getItem(COLLAPSE_KEY) === '1'; }
+            function setCollapsed(collapsed) {
+                localStorage.setItem(COLLAPSE_KEY, collapsed ? '1' : '0');
+                if (sidebar) sidebar.classList.toggle('collapsed', collapsed);
+                if (body) body.classList.toggle('sidebar-collapsed', collapsed);
+                if (collapseIcon) collapseIcon.className = collapsed ? 'bi bi-chevron-double-right' : 'bi bi-chevron-double-left';
+            }
             if (sidebar) {
+                setCollapsed(isCollapsed());
                 function openSidebar() { sidebar.classList.add('open'); document.body.style.overflow = 'hidden'; }
                 function closeSidebar() { sidebar.classList.remove('open'); document.body.style.overflow = ''; }
                 if (openBtn) openBtn.addEventListener('click', openSidebar);
                 if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
                 if (overlay) overlay.addEventListener('click', closeSidebar);
+                if (collapseBtn) collapseBtn.addEventListener('click', function() { setCollapsed(!isCollapsed()); });
             }
         });
     })();

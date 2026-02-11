@@ -71,6 +71,49 @@ body.app-body {
     box-shadow: 4px 0 24px rgba(0,0,0,0.15);
 }
 
+@media (min-width: 992px) {
+    .sidebar.collapsed {
+        width: 72px;
+    }
+    .sidebar.collapsed .sidebar-brand-text,
+    .sidebar.collapsed .sidebar-link span,
+    .sidebar.collapsed .sidebar-collapse-label,
+    .sidebar.collapsed .theme-toggle-wrapper .sidebar-label,
+    .sidebar.collapsed .sidebar-user-info,
+    .sidebar.collapsed .sidebar-btn-logout-text {
+        display: none !important;
+    }
+    .sidebar.collapsed .sidebar-brand {
+        justify-content: center;
+        padding: 0;
+    }
+    .sidebar.collapsed .sidebar-collapse-row {
+        justify-content: center;
+        margin-bottom: 0.75rem;
+    }
+    .sidebar.collapsed .sidebar-link {
+        justify-content: center;
+        padding: 0.75rem;
+    }
+    .sidebar.collapsed .sidebar-nav {
+        padding: 1rem 0.5rem;
+    }
+    .sidebar.collapsed .theme-toggle-wrapper {
+        justify-content: center;
+        margin-bottom: 0.75rem;
+    }
+    .sidebar.collapsed .sidebar-user {
+        justify-content: center;
+    }
+    .sidebar.collapsed .sidebar-btn-logout {
+        justify-content: center;
+        padding: 0.6rem;
+    }
+    .sidebar.collapsed .sidebar-footer {
+        padding: 1rem 0.5rem;
+    }
+}
+
 @media (max-width: 991.98px) {
     .sidebar {
         transform: translateX(-100%);
@@ -106,6 +149,39 @@ body.app-body {
 }
 
 .sidebar-brand-text { color: inherit; }
+
+.sidebar-collapse-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.sidebar-collapse-row .sidebar-label {
+    flex: 1;
+    font-size: 0.75rem;
+}
+
+.sidebar-collapse-btn {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: var(--sidebar-text);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-collapse-btn:hover {
+    background: var(--sidebar-hover);
+    color: var(--sidebar-text);
+}
+
+.sidebar-collapse-btn i { font-size: 1.1rem; }
 
 .sidebar-toggle {
     background: rgba(255,255,255,0.1);
@@ -295,6 +371,7 @@ body.app-body {
 
 @media (min-width: 992px) {
     .main-content.has-sidebar { margin-left: 260px; }
+    body.sidebar-collapsed .main-content.has-sidebar { margin-left: 72px; }
 }
 
 .main-content-inner {
