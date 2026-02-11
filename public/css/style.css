@@ -1,0 +1,251 @@
+/* ===== Variáveis e tema moderno ===== */
+:root {
+    --bg-page: #f0f2f5;
+    --card-bg: #ffffff;
+    --card-radius: 16px;
+    --card-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    --card-shadow-hover: 0 12px 40px rgba(0,0,0,0.1);
+    --primary: #0d6efd;
+    --primary-dark: #0a58ca;
+    --accent: #0d6efd;
+    --success: #198754;
+    --navbar-bg: #1a1d29;
+    --navbar-text: #e8eaed;
+    --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    background-color: var(--bg-page);
+    font-family: var(--font-sans);
+    color: #1f2937;
+    min-height: 100vh;
+}
+
+/* ===== Login – tela cheia moderna ===== */
+body:has(.login-wrapper) {
+    background: linear-gradient(145deg, #1a1d29 0%, #2d3142 50%, #1a1d29 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1.5rem;
+}
+
+body:has(.login-wrapper) main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+}
+
+.login-wrapper {
+    width: 100%;
+    max-width: 420px;
+}
+
+.login-card {
+    background: var(--card-bg);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow-hover);
+    border: none;
+    overflow: hidden;
+}
+
+.login-card .card-body {
+    padding: 2.5rem;
+}
+
+.login-card .brand-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--primary) 0%, #5a67d8 100%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.login-card h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1d29;
+    margin-bottom: 0.25rem;
+}
+
+.login-card .subtitle {
+    color: #6b7280;
+    font-size: 0.95rem;
+    margin-bottom: 1.75rem;
+}
+
+.login-card .form-control {
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    padding: 0.65rem 1rem;
+}
+
+.login-card .form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
+.login-card .input-group-text {
+    border-radius: 10px 0 0 10px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+}
+
+.login-card .btn-login {
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--primary) 0%, #5a67d8 100%);
+    border: none;
+}
+
+.login-card .btn-login:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
+}
+
+.login-card .credenciais-box {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 1rem;
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+/* ===== Navbar moderna ===== */
+.navbar-app {
+    background: var(--navbar-bg) !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    padding: 0.6rem 1rem;
+}
+
+.navbar-app .navbar-brand {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--navbar-text) !important;
+}
+
+.navbar-app .nav-link {
+    color: rgba(255,255,255,0.85) !important;
+    border-radius: 10px;
+    padding: 0.5rem 1rem !important;
+    font-weight: 500;
+}
+
+.navbar-app .nav-link:hover,
+.navbar-app .nav-link.active {
+    color: #fff !important;
+    background: rgba(255,255,255,0.1);
+}
+
+.navbar-app .navbar-text {
+    color: rgba(255,255,255,0.9) !important;
+    font-size: 0.9rem;
+}
+
+.navbar-app .btn-outline-light {
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+/* ===== Cards e conteúdo ===== */
+.card-modern {
+    background: var(--card-bg);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    border: none;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card-modern:hover {
+    box-shadow: var(--card-shadow-hover);
+}
+
+.card-modern.card-accent-success {
+    border-left: 4px solid var(--success);
+}
+
+.card-header-modern {
+    background: transparent;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.page-header {
+    margin-bottom: 1.5rem;
+}
+
+.page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1d29;
+}
+
+.table-modern {
+    --bs-table-striped-bg: rgba(0,0,0,0.02);
+}
+
+.table-modern thead th {
+    border-bottom: 2px solid #e5e7eb;
+    font-weight: 600;
+    color: #4b5563;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+/* ===== Dashboard e stat cards ===== */
+.stat-card {
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-hover);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    opacity: 0.85;
+}
+
+/* ===== Utilitários ===== */
+.btn {
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.card {
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    border: none;
+}
+
+.badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+}
+
+.action-buttons .btn {
+    margin: 0 2px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
