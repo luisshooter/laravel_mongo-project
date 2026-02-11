@@ -171,10 +171,9 @@
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <h6 class="mb-0 fw-bold">Mesa {{ $mesa }}</h6>
                                 @if($d['tem_abertos'])
-                                    <form action="{{ route('reports.encerrar-mesa', $mesa) }}" method="POST" class="d-inline" onsubmit="return confirm('Encerrar mesa {{ $mesa }}? Os pedidos abertos serão concluídos e o valor entrará nos lucros.');">
-                                        @csrf
-                                        <button type="submit" class="btn btn-sm btn-success"><i class="bi bi-check-circle"></i> Encerrar</button>
-                                    </form>
+                                    <a href="{{ route('reports.fechar-venda', $mesa) }}" class="btn btn-sm btn-success"><i class="bi bi-cash-coin"></i> Fechar venda</a>
+                                @else
+                                    <span class="badge bg-success">Disponível</span>
                                 @endif
                             </div>
                             <p class="small text-muted mb-1">{{ $d['quantidade'] }} pedido(s)</p>

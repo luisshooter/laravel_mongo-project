@@ -31,11 +31,13 @@ class DashboardController extends Controller
                 $query->where('user_id', $user->_id);
             }
             
-            $stats['total_orders'] = $query->count();
+            $stats['total_orders'] = (clone $query)->count();
             $stats['pending_orders'] = (clone $query)->where('status', Order::STATUS_PENDING)->count();
             $stats['processing_orders'] = (clone $query)->where('status', Order::STATUS_PROCESSING)->count();
             $stats['completed_orders'] = (clone $query)->where('status', Order::STATUS_COMPLETED)->count();
-            $stats['recent_orders'] = $query->orderBy('created_at', 'desc')->take(5)->get();
+            // Lista recente: só pedidos ativos (pendente/processando) para não poluir com mesas já encerradas
+            $stats['recent_orders'] = (clone $query)->whereIn('status', [Order::STATUS_PENDING, Order::STATUS_PROCESSING])
+                ->orderBy('created_at', 'desc')->take(5)->get();
         }
 
         return view('dashboard', compact('user', 'stats'));

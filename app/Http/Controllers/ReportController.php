@@ -95,7 +95,31 @@ class ReportController extends Controller
     }
 
     /**
-     * Encerrar mesa: marca todos os pedidos da mesa (pendente/processamento) como concluídos → entram nos lucros
+     * Tela de fechar venda: mostra resumo da mesa (pedidos abertos, total, pagamento) para confirmar e liberar a mesa
+     */
+    public function fecharVenda(int $mesa)
+    {
+        if ($mesa < 1 || $mesa > config('menu.mesas_count', 8)) {
+            return redirect()->route('reports.index')->with('error', 'Mesa inválida.');
+        }
+
+        $pedidos = Order::with('user')
+            ->where('mesa', $mesa)
+            ->whereIn('status', [Order::STATUS_PENDING, Order::STATUS_PROCESSING])
+            ->orderBy('created_at')
+            ->get();
+
+        if ($pedidos->isEmpty()) {
+            return redirect()->route('reports.index')
+                ->with('info', "Mesa $mesa não possui pedidos abertos para fechar.");
+        }
+
+        $totalMesa = $pedidos->sum('total_price');
+        return view('reports.fechar-venda', compact('mesa', 'pedidos', 'totalMesa'));
+    }
+
+    /**
+     * Encerrar mesa: confirma fechamento, marca pedidos como concluídos → entram nos lucros e mesa fica disponível
      */
     public function encerrarMesa(int $mesa)
     {
@@ -113,6 +137,6 @@ class ReportController extends Controller
         }
 
         return redirect()->route('reports.index')
-            ->with('success', "Mesa $mesa encerrada. $atualizados pedido(s) concluído(s) e valor lançado nos lucros.");
+            ->with('success', "Mesa $mesa encerrada. Venda fechada: $atualizados pedido(s) concluído(s). Mesa disponível para novo cliente.");
     }
 }

@@ -7,11 +7,24 @@
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
             <h1 class="page-title"><i class="bi bi-cart3"></i> Pedidos</h1>
-            <p class="text-muted mb-0">Cadastro e acompanhamento por mesa</p>
+            <p class="text-muted mb-0">
+                @if($incluirEncerrados)
+                    Todos os pedidos (incluindo mesas já encerradas)
+                @else
+                    Só pedidos ativos · Mesas encerradas não aparecem aqui
+                @endif
+            </p>
         </div>
-        <a href="{{ route('orders.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-1"></i> Novo pedido
-        </a>
+        <div class="d-flex gap-2 align-items-center">
+            @if($incluirEncerrados)
+                <a href="{{ route('orders.index') }}" class="btn btn-outline-secondary btn-sm">Ver só ativos</a>
+            @else
+                <a href="{{ route('orders.index', ['encerrados' => 1]) }}" class="btn btn-outline-secondary btn-sm">Ver encerrados</a>
+            @endif
+            <a href="{{ route('orders.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-1"></i> Novo pedido
+            </a>
+        </div>
     </div>
 </div>
 
@@ -78,7 +91,12 @@
             </div>
         @else
             <div class="alert alert-info mb-0">
-                <i class="bi bi-info-circle"></i> Nenhum pedido encontrado.
+                @if($incluirEncerrados)
+                    <i class="bi bi-info-circle"></i> Nenhum pedido encontrado.
+                @else
+                    <i class="bi bi-info-circle"></i> Nenhum pedido ativo no momento. Todas as mesas estão disponíveis.
+                    <a href="{{ route('orders.index', ['encerrados' => 1]) }}" class="alert-link">Ver pedidos encerrados</a>
+                @endif
             </div>
         @endif
     </div>

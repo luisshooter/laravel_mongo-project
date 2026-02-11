@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     // Relatórios: Gerente (2) e Admin (3)
     Route::middleware(['check.permission:2,3'])->group(function () {
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/mesa/{mesa}/fechar-venda', [ReportController::class, 'fecharVenda'])->name('reports.fechar-venda');
         Route::post('/reports/encerrar-mesa/{mesa}', [ReportController::class, 'encerrarMesa'])->name('reports.encerrar-mesa');
     });
 });

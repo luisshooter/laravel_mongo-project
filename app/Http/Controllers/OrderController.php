@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $query = Order::with('user')->orderBy('created_at', 'desc');
 
@@ -17,8 +17,14 @@ class OrderController extends Controller
             $query->where('user_id', Auth::id());
         }
 
+        // Por padrão: só pedidos ativos (pendente/processando). Mesa encerrada = pedidos concluídos não aparecem = mesa disponível
+        $incluirEncerrados = $request->boolean('encerrados');
+        if (!$incluirEncerrados) {
+            $query->whereIn('status', [Order::STATUS_PENDING, Order::STATUS_PROCESSING]);
+        }
+
         $orders = $query->get();
-        return view('orders.index', compact('orders'));
+        return view('orders.index', compact('orders', 'incluirEncerrados'));
     }
 
     public function create()
