@@ -558,6 +558,86 @@ body.app-body {
     color: var(--text-primary);
 }
 
+/* Card header genérico (telas de pedidos, usuários, etc.) seguem o tema */
+.main-content .card .card-header {
+    background: transparent;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.main-content .card .card-header h4,
+.main-content .card .card-header h5,
+.main-content .card .card-header .mb-0 {
+    color: var(--text-primary) !important;
+}
+
+/* Tabelas genéricas (.table) em todas as telas */
+.main-content .table {
+    color: var(--text-primary);
+}
+
+.main-content .table th,
+.main-content .table td {
+    border-color: var(--border-color);
+}
+
+.main-content .table thead th {
+    color: var(--text-secondary);
+}
+
+.main-content .table tbody td {
+    color: var(--text-primary);
+}
+
+.main-content .table.table-sm th,
+.main-content .table.table-sm td {
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.main-content strong {
+    color: var(--text-primary);
+}
+
+/* Form check e labels em formulários */
+.main-content .form-check-label {
+    color: var(--text-secondary);
+}
+
+.main-content .form-check-input:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Cards com borda colorida (ex.: fechar-venda) – corpo do card segue o tema */
+.main-content .card.border-primary .card-body,
+.main-content .card.border-warning .card-body {
+    color: var(--text-primary);
+}
+
+.main-content .card.border-primary .card-body .text-primary {
+    color: var(--primary) !important;
+}
+
+.main-content .card.border-primary .card-body .text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Links e botões dentro do conteúdo */
+.main-content a:not(.btn):not(.alert-link) {
+    color: var(--primary);
+}
+
+.main-content a:not(.btn):not(.alert-link):hover {
+    color: var(--primary-hover);
+}
+
+/* Placeholder e selects option no tema escuro */
+#html-theme[data-theme="dark"] .main-content .form-select option {
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
 .page-header { margin-bottom: 1.5rem; }
 
 .page-title {
