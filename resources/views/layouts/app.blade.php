@@ -82,7 +82,7 @@
     </header>
     @endauth
 
-    <main class="main-content" id="mainContent">
+    <main class="main-content @auth has-sidebar @endauth" id="mainContent">
         @auth
         <div class="main-content-inner">
             <div class="d-none d-lg-flex align-items-center justify-content-end gap-2 mb-3">

@@ -294,7 +294,7 @@ body.app-body {
 }
 
 @media (min-width: 992px) {
-    .main-content { margin-left: 260px; }
+    .main-content.has-sidebar { margin-left: 260px; }
 }
 
 .main-content-inner {
@@ -310,8 +310,10 @@ body.app-body {
     .main-content-inner { padding-top: 72px; }
 }
 
-/* ===== Login – tema preto e roxo ===== */
+/* ===== Login – tema preto e roxo (centralizado) ===== */
 .login-page {
+    width: 100%;
+    max-width: 100%;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -324,7 +326,7 @@ body.app-body {
 .login-bg {
     position: fixed;
     inset: 0;
-    background: #0a0612;
+    background: var(--bg-page);
     z-index: 0;
 }
 
@@ -377,11 +379,11 @@ body.app-body {
 }
 
 .login-card {
-    background: rgba(26, 19, 37, 0.85);
+    background: var(--card-bg);
     backdrop-filter: blur(20px);
     border-radius: 24px;
-    border: 1px solid rgba(139, 92, 246, 0.2);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow-hover);
 }
 
 .login-card-inner { padding: 2.5rem; }
@@ -405,12 +407,12 @@ body.app-body {
 .login-title {
     font-size: 1.75rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--text-primary);
     margin: 0 0 0.35rem;
 }
 
 .login-subtitle {
-    color: rgba(255,255,255,0.6);
+    color: var(--text-muted);
     font-size: 0.95rem;
     margin: 0;
 }
@@ -561,6 +563,64 @@ body.app-body {
 }
 
 .text-muted { color: var(--text-muted) !important; }
+
+/* Contraste: texto visível conforme o tema (claro/escuro) */
+.main-content,
+.main-content-inner {
+    color: var(--text-primary);
+}
+
+.main-content h1,
+.main-content h2,
+.main-content h3,
+.main-content h4,
+.main-content h5,
+.main-content h6 {
+    color: var(--text-primary) !important;
+}
+
+.main-content p,
+.main-content li,
+.main-content td,
+.main-content th,
+.main-content .card-body,
+.main-content .card {
+    color: var(--text-primary);
+}
+
+.main-content label,
+.main-content .form-label {
+    color: var(--text-secondary) !important;
+}
+
+.main-content small {
+    color: var(--text-muted) !important;
+}
+
+.main-content .list-group-item {
+    color: var(--text-primary);
+}
+
+.main-content .btn-outline-secondary {
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+.main-content .btn-outline-secondary:hover {
+    background: var(--sidebar-hover);
+    color: var(--text-primary);
+    border-color: var(--primary);
+}
+
+#html-theme[data-theme="dark"] .main-content .btn-outline-danger {
+    color: #f87171;
+    border-color: #f87171;
+}
+
+#html-theme[data-theme="dark"] .main-content .btn-outline-danger:hover {
+    background: rgba(248, 113, 113, 0.2);
+    color: #fca5a5;
+}
 
 .table-modern {
     --bs-table-bg: transparent;
