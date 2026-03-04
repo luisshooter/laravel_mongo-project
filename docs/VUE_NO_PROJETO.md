@@ -1,6 +1,6 @@
 # Vue.js no projeto
 
-O projeto usa **Vue 3** com **Vite** integrado ao Laravel. O Vue gerencia parte das telas: formulário de pedidos (criar/editar) e os cards de estatísticas do dashboard.
+O projeto usa **Vue 3** com **Vite** e **Bootstrap-Vue-3** (Bootstrap 5 como componentes Vue) integrados ao Laravel. O Vue gerencia parte das telas: formulário de pedidos (criar/editar) e os cards de estatísticas do dashboard.
 
 ## Onde o Vue é usado
 
@@ -31,12 +31,22 @@ npm run build
 
 Os arquivos são gerados em `public/build`. O helper `@vite()` no Blade carrega esses arquivos.
 
+## Bootstrap + Vue
+
+Foi instalado o **bootstrap-vue-3**, que fornece componentes Vue para Bootstrap 5. O plugin é registrado em `app.js` com `createApp(...).use(BootstrapVue3)`.
+
+**Componentes usados:**
+- **OrderForm:** `BAlert`, `BRow`, `BCol`, `BFormSelect`, `BFormInput`, `BButton`
+- **DashboardStats:** `BRow`, `BCol`, `BCard`, `BCardBody`
+
+O layout continua carregando o Bootstrap 5 por CDN; o CSS do bootstrap-vue-3 é importado no bundle para estilos dos componentes. Você pode usar qualquer componente do [bootstrap-vue-3](https://github.com/cdmoro/bootstrap-vue-3) (BModal, BDropdown, BTable, etc.) nos seus `.vue`.
+
 ## Estrutura
 
-- `resources/js/app.js` – Entrada: monta `OrderForm` em `#order-form-app`, `DashboardStats` em `#dashboard-vue`, ou `App` em `#app`.
+- `resources/js/app.js` – Entrada: importa BootstrapVue3 e CSS; monta `OrderForm` em `#order-form-app`, `DashboardStats` em `#dashboard-vue`, ou `App` em `#app`.
 - `resources/js/App.vue` – Componente padrão quando não há outro mount point.
-- `resources/js/components/OrderForm.vue` – Formulário de pedido (create/edit).
-- `resources/js/components/DashboardStats.vue` – Cards de estatísticas do dashboard.
+- `resources/js/components/OrderForm.vue` – Formulário de pedido (create/edit) com componentes Bootstrap-Vue.
+- `resources/js/components/DashboardStats.vue` – Cards de estatísticas do dashboard com BCard/BRow/BCol.
 
 ## Usando componentes
 

@@ -1,4 +1,6 @@
 import { createApp } from 'vue';
+import BootstrapVue3 from 'bootstrap-vue-3';
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
 import App from './App.vue';
 import OrderForm from './components/OrderForm.vue';
 import DashboardStats from './components/DashboardStats.vue';
@@ -8,7 +10,7 @@ function mountVue() {
   if (orderFormEl) {
     const propsRaw = orderFormEl.getAttribute('data-props');
     const props = propsRaw ? JSON.parse(propsRaw) : {};
-    createApp(OrderForm, props).mount(orderFormEl);
+    createApp(OrderForm, props).use(BootstrapVue3).mount(orderFormEl);
     return;
   }
 
@@ -16,13 +18,13 @@ function mountVue() {
   if (dashboardEl) {
     const propsRaw = dashboardEl.getAttribute('data-props');
     const props = propsRaw ? JSON.parse(propsRaw) : {};
-    createApp(DashboardStats, props).mount(dashboardEl);
+    createApp(DashboardStats, props).use(BootstrapVue3).mount(dashboardEl);
     return;
   }
 
   const appEl = document.getElementById('app');
   if (appEl) {
-    createApp(App).mount(appEl);
+    createApp(App).use(BootstrapVue3).mount(appEl);
   }
 }
 
