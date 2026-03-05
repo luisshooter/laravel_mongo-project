@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -29,13 +30,26 @@ class OrderController extends Controller
 
     public function create()
     {
-        return view('orders.create');
+        $products = Product::where('is_active', true)->get();
+        $productsByCategory = [];
+        $categories = Product::getCategories();
+        
+        foreach ($categories as $key => $label) {
+            $productsByCategory[$key] = [
+                'label' => $label,
+                'items' => $products->where('category', $key)->values()
+            ];
+        }
+
+        return view('orders.create', compact('productsByCategory'));
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'mesa' => 'required|integer|min:1|max:8',
+            'customer_name' => 'required|string|max:255',
+            'customer_cpf' => 'nullable|string|max:20',
+            'customer_address' => 'nullable|string|max:500',
             'items' => 'required|array|min:1',
             'items.*.id' => 'required|string',
             'items.*.name' => 'required|string',
@@ -45,9 +59,8 @@ class OrderController extends Controller
             'payment_method' => 'required|in:dinheiro,cartao',
             'notes' => 'nullable|string|max:1000',
         ], [
-            'mesa.required' => 'Selecione a mesa.',
-            'mesa.min' => 'Mesa inválida.',
-            'mesa.max' => 'O restaurante possui 8 mesas.',
+            'customer_name.required' => 'Informe o nome do cliente.',
+            'customer_name.max' => 'Nome do cliente muito longo.',
             'items.required' => 'Adicione ao menos um item ao pedido.',
             'items.min' => 'Adicione ao menos um item ao pedido.',
             'payment_method.required' => 'Selecione a forma de pagamento.',
@@ -59,9 +72,17 @@ class OrderController extends Controller
         }
 
         $items = [];
+        $productsToUpdate = [];
         foreach ($request->items as $item) {
             if (($item['quantity'] ?? 0) < 1) {
                 continue;
+            }
+            $product = \App\Models\Product::find($item['id']);
+            if (!$product) {
+                return back()->withErrors(['items' => "Produto {$item['name']} não encontrado."])->withInput();
+            }
+            if ($product->stock < $item['quantity']) {
+                return back()->withErrors(['items' => "Estoque insuficiente para {$item['name']} (disp: {$product->stock})."])->withInput();
             }
             $items[] = [
                 'id' => $item['id'],
@@ -69,15 +90,23 @@ class OrderController extends Controller
                 'quantity' => (int) $item['quantity'],
                 'unit_price' => (float) $item['unit_price'],
             ];
+            $product->stock -= (int) $item['quantity'];
+            $productsToUpdate[] = $product;
         }
 
         if (empty($items)) {
             return back()->withErrors(['items' => 'Adicione ao menos um item com quantidade maior que zero.'])->withInput();
         }
 
+        foreach ($productsToUpdate as $p) {
+            $p->save();
+        }
+
         Order::create([
             'user_id' => Auth::id(),
-            'mesa' => (int) $request->mesa,
+            'customer_name' => $request->customer_name,
+            'customer_cpf' => $request->customer_cpf,
+            'customer_address' => $request->customer_address,
             'items' => $items,
             'status' => $request->status,
             'payment_method' => $request->payment_method,
@@ -107,7 +136,18 @@ class OrderController extends Controller
             abort(403, 'Acesso não autorizado.');
         }
 
-        return view('orders.edit', compact('order'));
+        $products = Product::where('is_active', true)->get();
+        $productsByCategory = [];
+        $categories = Product::getCategories();
+        
+        foreach ($categories as $key => $label) {
+            $productsByCategory[$key] = [
+                'label' => $label,
+                'items' => $products->where('category', $key)->values()
+            ];
+        }
+
+        return view('orders.edit', compact('order', 'productsByCategory'));
     }
 
     public function update(Request $request, $id)
@@ -119,7 +159,9 @@ class OrderController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'mesa' => 'required|integer|min:1|max:8',
+            'customer_name' => 'required|string|max:255',
+            'customer_cpf' => 'nullable|string|max:20',
+            'customer_address' => 'nullable|string|max:500',
             'items' => 'required|array|min:1',
             'items.*.id' => 'required|string',
             'items.*.name' => 'required|string',
@@ -129,7 +171,7 @@ class OrderController extends Controller
             'payment_method' => 'required|in:dinheiro,cartao',
             'notes' => 'nullable|string|max:1000',
         ], [
-            'mesa.required' => 'Selecione a mesa.',
+            'customer_name.required' => 'Informe o nome do cliente.',
             'items.required' => 'Adicione ao menos um item ao pedido.',
             'payment_method.required' => 'Selecione a forma de pagamento.',
             'payment_method.in' => 'Forma de pagamento inválida.',
@@ -139,23 +181,57 @@ class OrderController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $items = [];
+        $oldItems = $order->items ?? [];
+        $newItemsReq = [];
         foreach ($request->items as $item) {
             if (($item['quantity'] ?? 0) < 1) continue;
-            $items[] = [
-                'id' => $item['id'],
-                'name' => $item['name'],
-                'quantity' => (int) $item['quantity'],
-                'unit_price' => (float) $item['unit_price'],
-            ];
+            $newItemsReq[] = $item;
         }
-
-        if (empty($items)) {
+        
+        if (empty($newItemsReq)) {
             return back()->withErrors(['items' => 'Adicione ao menos um item.'])->withInput();
         }
 
+        $stockChanges = [];
+        foreach ($oldItems as $old) {
+            $stockChanges[$old['id']] = - $old['quantity'];
+        }
+        foreach ($newItemsReq as $new) {
+            if (!isset($stockChanges[$new['id']])) $stockChanges[$new['id']] = 0;
+            $stockChanges[$new['id']] += $new['quantity'];
+        }
+
+        $productsToUpdate = [];
+        foreach ($stockChanges as $id => $change) {
+            if ($change == 0) continue;
+            $product = \App\Models\Product::find($id);
+            if ($product) {
+                if ($product->stock - $change < 0) {
+                    return back()->withErrors(['items' => "Estoque insuficiente para {$product->name}."])->withInput();
+                }
+                $product->stock -= $change;
+                $productsToUpdate[] = $product;
+            }
+        }
+
+        foreach ($productsToUpdate as $p) {
+            $p->save();
+        }
+
+        $items = [];
+        foreach ($newItemsReq as $new) {
+            $items[] = [
+                'id' => $new['id'],
+                'name' => $new['name'],
+                'quantity' => (int) $new['quantity'],
+                'unit_price' => (float) $new['unit_price'],
+            ];
+        }
+
         $order->update([
-            'mesa' => (int) $request->mesa,
+            'customer_name' => $request->customer_name,
+            'customer_cpf' => $request->customer_cpf,
+            'customer_address' => $request->customer_address,
             'items' => $items,
             'status' => $request->status,
             'payment_method' => $request->payment_method,
@@ -174,6 +250,15 @@ class OrderController extends Controller
             abort(403, 'Apenas Gerente ou Administrador podem excluir pedidos.');
         }
 
+        if (is_array($order->items)) {
+            foreach ($order->items as $item) {
+                $p = \App\Models\Product::find($item['id']);
+                if ($p) {
+                    $p->stock += $item['quantity'];
+                    $p->save();
+                }
+            }
+        }
         $order->delete();
         return redirect()->route('orders.index')
             ->with('success', 'Pedido removido com sucesso!');

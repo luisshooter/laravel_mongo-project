@@ -33,10 +33,10 @@
             <BCardBody>
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <p class="text-uppercase small mb-1 opacity-90">Pedidos</p>
+                  <p class="text-uppercase small mb-1 opacity-90">Vendas (Pedidos)</p>
                   <h2 class="mb-0 fw-bold">{{ stats.total_orders }}</h2>
                 </div>
-                <i class="bi bi-cart3 stat-icon"></i>
+                <i class="bi bi-shop stat-icon"></i>
               </div>
             </BCardBody>
           </BCard>
@@ -61,10 +61,10 @@
             <BCardBody>
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <p class="text-uppercase small mb-1 opacity-90">Pedidos</p>
+                  <p class="text-uppercase small mb-1 opacity-90">Vendas (Pedidos)</p>
                   <h2 class="mb-0 fw-bold">{{ stats.total_orders }}</h2>
                 </div>
-                <i class="bi bi-cart3 stat-icon"></i>
+                <i class="bi bi-shop stat-icon"></i>
               </div>
             </BCardBody>
           </BCard>
@@ -87,10 +87,10 @@
             <BCardBody>
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <p class="text-uppercase small mb-1 opacity-90">Processando</p>
+                  <p class="text-uppercase small mb-1 opacity-90">Montando / Preparando</p>
                   <h2 class="mb-0 fw-bold">{{ stats.processing_orders }}</h2>
                 </div>
-                <i class="bi bi-arrow-repeat stat-icon"></i>
+                <i class="bi bi-flower2 stat-icon"></i>
               </div>
             </BCardBody>
           </BCard>

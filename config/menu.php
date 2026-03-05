@@ -2,27 +2,27 @@
 
 return [
     /*
-    | Cardápio do restaurante: 7 pratos italianos, 3 drinks, 4 refrigerantes
+    | Cardápio da Floricultura: 7 buquês/arranjos, 3 plantas, 4 presentes/cestas
     */
     'pratos' => [
-        ['id' => 'prato_1', 'name' => 'Espaguete à Bolonhesa', 'price' => 32.00],
-        ['id' => 'prato_2', 'name' => 'Lasanha à Bolonhesa', 'price' => 38.00],
-        ['id' => 'prato_3', 'name' => 'Risoto de Cogumelos', 'price' => 42.00],
-        ['id' => 'prato_4', 'name' => 'Penne ao Molho Pesto', 'price' => 35.00],
-        ['id' => 'prato_5', 'name' => 'Pizza Margherita (fatia)', 'price' => 18.00],
-        ['id' => 'prato_6', 'name' => 'Ravioli de Queijo', 'price' => 40.00],
-        ['id' => 'prato_7', 'name' => 'Frango Parmegiana', 'price' => 45.00],
+        ['id' => 'flor_1', 'name' => 'Buquê de Rosas Vermelhas', 'price' => 120.00],
+        ['id' => 'flor_2', 'name' => 'Arranjo de Girassóis', 'price' => 85.00],
+        ['id' => 'flor_3', 'name' => 'Buquê de Lírios Brancos', 'price' => 140.00],
+        ['id' => 'flor_4', 'name' => 'Cesta Mística de Flores do Campo', 'price' => 95.00],
+        ['id' => 'flor_5', 'name' => 'Orquídea Phalaenopsis Branca', 'price' => 110.00],
+        ['id' => 'flor_6', 'name' => 'Arranjo Tropical', 'price' => 130.00],
+        ['id' => 'flor_7', 'name' => 'Buquê Misto Colorido', 'price' => 90.00],
     ],
     'drinks' => [
-        ['id' => 'drink_1', 'name' => 'Caipirinha', 'price' => 22.00],
-        ['id' => 'drink_2', 'name' => 'Vinho Tinto (taça)', 'price' => 28.00],
-        ['id' => 'drink_3', 'name' => 'Cerveja Artesanal', 'price' => 18.00],
+        ['id' => 'planta_1', 'name' => 'Samambaia Americana', 'price' => 45.00],
+        ['id' => 'planta_2', 'name' => 'Zamioculca no Vaso', 'price' => 65.00],
+        ['id' => 'planta_3', 'name' => 'Espada-de-São-Jorge', 'price' => 40.00],
     ],
     'refrigerantes' => [
-        ['id' => 'refri_1', 'name' => 'Coca-Cola', 'price' => 8.00],
-        ['id' => 'refri_2', 'name' => 'Guaraná', 'price' => 8.00],
-        ['id' => 'refri_3', 'name' => 'Água com Gás', 'price' => 6.00],
-        ['id' => 'refri_4', 'name' => 'Suco Natural', 'price' => 12.00],
+        ['id' => 'presente_1', 'name' => 'Cesta de Chocolates Média', 'price' => 110.00],
+        ['id' => 'presente_2', 'name' => 'Ursinho de Pelúcia', 'price' => 55.00],
+        ['id' => 'presente_3', 'name' => 'Cartão Personalizado', 'price' => 15.00],
+        ['id' => 'presente_4', 'name' => 'Vaso de Vidro Decorativo', 'price' => 45.00],
     ],
 
     'mesas_count' => 8,

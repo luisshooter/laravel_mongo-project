@@ -3,102 +3,113 @@
 @section('title', 'Pedidos')
 
 @section('content')
-<div class="page-header mb-4">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <div>
-            <h1 class="page-title"><i class="bi bi-cart3"></i> Pedidos</h1>
-            <p class="text-muted mb-0">
-                @if($incluirEncerrados)
-                    Todos os pedidos (incluindo mesas já encerradas)
+    <div class="page-header mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h1 class="page-title"><i class="bi bi-cart3"></i> Pedidos</h1>
+                <p class="text-muted mb-0">
+                    @if ($incluirEncerrados)
+                        Todos os pedidos (incluindo atendimentos já encerrados)
+                    @else
+                        Só pedidos ativos · Atendimentos encerrados não aparecem aqui
+                    @endif
+                </p>
+            </div>
+            <div class="d-flex gap-2 align-items-center">
+                @if ($incluirEncerrados)
+                    <a href="{{ route('orders.index') }}" class="btn btn-outline-secondary btn-sm">Ver só ativos</a>
                 @else
-                    Só pedidos ativos · Mesas encerradas não aparecem aqui
+                    <a href="{{ route('orders.index', ['encerrados' => 1]) }}" class="btn btn-outline-secondary btn-sm">Ver
+                        encerrados</a>
                 @endif
-            </p>
-        </div>
-        <div class="d-flex gap-2 align-items-center">
-            @if($incluirEncerrados)
-                <a href="{{ route('orders.index') }}" class="btn btn-outline-secondary btn-sm">Ver só ativos</a>
-            @else
-                <a href="{{ route('orders.index', ['encerrados' => 1]) }}" class="btn btn-outline-secondary btn-sm">Ver encerrados</a>
-            @endif
-            <a href="{{ route('orders.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle me-1"></i> Novo pedido
-            </a>
+                <a href="{{ route('orders.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i> Novo pedido
+                </a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="card card-modern">
-    <div class="card-body">
-        @if($orders->count() > 0)
-            <div class="table-responsive">
-                <table class="table table-modern table-hover">
-                    <thead>
-                        <tr>
-                            <th>Mesa</th>
-                            <th>Itens (resumo)</th>
-                            <th>Total</th>
-                            <th>Pagamento</th>
-                            <th>Status</th>
-                            @if(Auth::user()->permission_level >= 2)
-                                <th>Criado por</th>
-                            @endif
-                            <th>Data</th>
-                            <th width="150">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($orders as $order)
+    <div class="card card-modern">
+        <div class="card-body">
+            @if ($orders->count() > 0)
+                <div class="table-responsive">
+                    <table class="table table-modern table-hover">
+                        <thead>
                             <tr>
-                                <td><strong>Mesa {{ $order->mesa }}</strong></td>
-                                <td>
-                                    @if(is_array($order->items))
-                                        @foreach(array_slice($order->items, 0, 3) as $it)
-                                            <small>{{ $it['name'] }} ({{ $it['quantity'] }})</small>
-                                            @if(!$loop->last) · @endif
-                                        @endforeach
-                                        @if(count($order->items) > 3)
-                                            <small class="text-muted">+{{ count($order->items) - 3 }} itens</small>
-                                        @endif
-                                    @else
-                                        —
-                                    @endif
-                                </td>
-                                <td><strong>R$ {{ number_format($order->total_price, 2, ',', '.') }}</strong></td>
-                                <td><span class="badge bg-secondary">{{ $order->payment_label }}</span></td>
-                                <td>
-                                    <span class="badge bg-{{ $order->status_badge }}">{{ $order->status_label }}</span>
-                                </td>
-                                @if(Auth::user()->permission_level >= 2)
-                                    <td><small>{{ $order->user->name ?? '-' }}</small></td>
+                                <th>Cliente</th>
+                                <th>Itens (resumo)</th>
+                                <th>Total</th>
+                                <th>Pagamento</th>
+                                <th>Status</th>
+                                @if (Auth::user()->permission_level >= 2)
+                                    <th>Criado por</th>
                                 @endif
-                                <td><small>{{ $order->formatted_created_at }}</small></td>
-                                <td>
-                                    <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-info" title="Ver"><i class="bi bi-eye"></i></a>
-                                    <a href="{{ route('orders.edit', $order->id) }}" class="btn btn-sm btn-warning" title="Editar"><i class="bi bi-pencil"></i></a>
-                                    @if(Auth::user()->permission_level >= 2)
-                                        <form action="{{ route('orders.destroy', $order->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Excluir este pedido?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Excluir"><i class="bi bi-trash"></i></button>
-                                        </form>
-                                    @endif
-                                </td>
+                                <th>Data</th>
+                                <th width="150">Ações</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @else
-            <div class="alert alert-info mb-0">
-                @if($incluirEncerrados)
-                    <i class="bi bi-info-circle"></i> Nenhum pedido encontrado.
-                @else
-                    <i class="bi bi-info-circle"></i> Nenhum pedido ativo no momento. Todas as mesas estão disponíveis.
-                    <a href="{{ route('orders.index', ['encerrados' => 1]) }}" class="alert-link">Ver pedidos encerrados</a>
-                @endif
-            </div>
-        @endif
+                        </thead>
+                        <tbody>
+                            @foreach ($orders as $order)
+                                <tr>
+                                    <td>
+                                        <strong>{{ $order->customer_name ?? 'Não informado' }}</strong>
+                                    </td>
+                                    <td>
+                                        @if (is_array($order->items))
+                                            @foreach (array_slice($order->items, 0, 3) as $it)
+                                                <small>{{ $it['name'] }} ({{ $it['quantity'] }})</small>
+                                                @if (!$loop->last)
+                                                    ·
+                                                @endif
+                                            @endforeach
+                                            @if (count($order->items) > 3)
+                                                <small class="text-muted">+{{ count($order->items) - 3 }} itens</small>
+                                            @endif
+                                        @else
+                                            —
+                                        @endif
+                                    </td>
+                                    <td><strong>R$ {{ number_format($order->total_price, 2, ',', '.') }}</strong></td>
+                                    <td><span class="badge bg-secondary">{{ $order->payment_label }}</span></td>
+                                    <td>
+                                        <span class="badge bg-{{ $order->status_badge }}">{{ $order->status_label }}</span>
+                                    </td>
+                                    @if (Auth::user()->permission_level >= 2)
+                                        <td><small>{{ $order->user->name ?? '-' }}</small></td>
+                                    @endif
+                                    <td><small>{{ $order->formatted_created_at }}</small></td>
+                                    <td>
+                                        <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-info"
+                                            title="Ver"><i class="bi bi-eye"></i></a>
+                                        <a href="{{ route('orders.edit', $order->id) }}" class="btn btn-sm btn-warning"
+                                            title="Editar"><i class="bi bi-pencil"></i></a>
+                                        @if (Auth::user()->permission_level >= 2)
+                                            <form action="{{ route('orders.destroy', $order->id) }}" method="POST"
+                                                class="d-inline" onsubmit="return confirm('Excluir este pedido?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Excluir"><i
+                                                        class="bi bi-trash"></i></button>
+                                            </form>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="alert alert-info mb-0">
+                    @if ($incluirEncerrados)
+                        <i class="bi bi-info-circle"></i> Nenhum pedido encontrado.
+                    @else
+                        <i class="bi bi-info-circle"></i> Nenhum pedido ativo no momento. Todos os atendimentos estão
+                        disponíveis.
+                        <a href="{{ route('orders.index', ['encerrados' => 1]) }}" class="alert-link">Ver pedidos
+                            encerrados</a>
+                    @endif
+                </div>
+            @endif
+        </div>
     </div>
-</div>
 @endsection

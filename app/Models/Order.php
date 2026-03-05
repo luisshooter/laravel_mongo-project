@@ -4,6 +4,7 @@ namespace App\Models;
 
 use MongoDB\Laravel\Eloquent\Model;
 use Carbon\Carbon;
+use App\Models\Product;
 
 class Order extends Model
 {
@@ -12,7 +13,9 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
-        'mesa',
+        'customer_name',
+        'customer_cpf',
+        'customer_address',
         'items',
         'total_price',
         'status',
@@ -37,7 +40,6 @@ class Order extends Model
     }
 
     protected $casts = [
-        'mesa' => 'integer',
         'items' => 'array',
         'total_price' => 'decimal:2',
         'created_at' => 'datetime',
@@ -103,12 +105,15 @@ class Order extends Model
     /** Retorna todos os itens do cardápio (pratos + drinks + refrigerantes) */
     public static function getMenuItems(): array
     {
-        $menu = config('menu', []);
+        $products = Product::where('is_active', true)->get();
         $items = [];
-        foreach (['pratos', 'drinks', 'refrigerantes'] as $cat) {
-            foreach ($menu[$cat] ?? [] as $item) {
-                $items[$item['id']] = $item;
-            }
+        foreach ($products as $p) {
+            $items[$p->id] = [
+                'id' => clone $p->_id,
+                'name' => $p->name,
+                'price' => $p->price,
+                'stock' => $p->stock
+            ];
         }
         return $items;
     }
